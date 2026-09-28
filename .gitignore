@@ -1,0 +1,13 @@
+# whitelist: only code and the static page shell are versioned
+*
+!.gitignore
+!README.md
+!requirements.txt
+!*.py
+!site/
+site/*
+!site/index.html
+!site/app.js
+!site/style.css
+!.github/
+!.github/**

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สุขภาพบ้านบึงสว่าง</title>
+<meta name="description" content="ค้นหาข้อมูลสุขภาพจาก HDC ของบ้านบึงสว่าง หมู่ 11 ต.บ้านเหล่า อ.บ้านฝาง จ.ขอนแก่น และ รพ.สต.บ้านแดง">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z" fill="currentColor"/></svg>
+      </span>
+      <span>
+        <span class="brand-name">สุขภาพบ้านบึงสว่าง</span>
+        <span class="brand-sub">ม.11 ต.บ้านเหล่า อ.บ้านฝาง จ.ขอนแก่น · รพ.สต.บ้านแดง</span>
+      </span>
+    </a>
+    <div class="top-meta" id="freshness"></div>
+  </div>
+</header>
+
+<section class="searchbar">
+  <div class="wrap searchbar-inner">
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="ค้นหา เช่น เบาหวาน ความดัน ผู้สูงอายุ วัคซีน ฟัน" aria-label="ค้นหารายงาน">
+    </label>
+    <div class="seg" role="radiogroup" aria-label="พื้นที่">
+      <button type="button" role="radio" data-area="v">บ้านบึงสว่าง <small>ม.11</small></button>
+      <button type="button" role="radio" data-area="f">รพ.สต.บ้านแดง <small>ทั้งหมด</small></button>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="app" tabindex="-1"></main>
+
+<footer class="foot">
+  <div class="wrap">
+    ตัวเลขทั้งหมดดึงจากรายงานมาตรฐานบนเว็บ <a href="https://hdc.moph.go.th/kkn/public/main" target="_blank" rel="noopener">HDC จังหวัดขอนแก่น</a>
+    (ชุดเดียวกับที่เห็นบนเว็บ HDC) · อัปเดตอัตโนมัติ · ตัวเลขระดับหมู่บ้านบางรายการมีจำนวนน้อย ควรใช้อย่างระมัดระวัง
+  </div>
+</footer>
+
+<div class="tooltip" id="tip" role="status" hidden></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

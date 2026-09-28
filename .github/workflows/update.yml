@@ -1,0 +1,67 @@
+name: อัปเดตข้อมูล HDC และหน้าเว็บ
+
+on:
+  schedule:
+    - cron: "0 23 * * *"   # 06:00 น. เวลาไทย
+    - cron: "0 11 * * *"   # 18:00 น. เวลาไทย
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: hdc-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # the SQLite DB lives in the Actions cache between runs (not in git);
+      # if it is ever evicted the next run simply refetches everything (~2 h)
+      - name: Restore database
+        uses: actions/cache/restore@v4
+        with:
+          path: opendata.sqlite
+          key: hdc-db-${{ github.run_id }}
+          restore-keys: hdc-db-
+
+      - name: Check HDC is reachable from GitHub
+        run: |
+          curl -sS -m 30 -o /dev/null -w "api-hdc %{http_code}\n" "https://api-hdc.moph.go.th/v1/lookup/standard/catalog"
+          curl -sS -m 30 -o /dev/null -w "api-center-hdc %{http_code}\n" "https://api-center-hdc.moph.go.th/v1/report-public/info?reportCode=aa86b13e8cb60cae6c3216b7e3e5f151&subCatalogId="
+
+      - name: Fetch from HDC
+        run: python fetch_hdc.py --max-minutes 300
+
+      - name: Save database
+        if: always() && hashFiles('opendata.sqlite') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: opendata.sqlite
+          key: hdc-db-${{ github.run_id }}
+
+      - name: Build site
+        run: python build_site.py
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
