@@ -448,6 +448,13 @@ def rebuild_site():
         log(f"site rebuilt: {path}")
     except Exception as e:  # never let the site break data collection
         log(f"site rebuild failed: {e!r}")
+        return
+    try:
+        import publish_site
+        log(f"GitHub Pages: {publish_site.publish()}")
+    except Exception as e:
+        detail = getattr(e, "stderr", "") or ""
+        log(f"GitHub Pages publish failed: {e!r} {detail.strip()[:200]}")
 
 
 def main():
